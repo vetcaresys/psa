@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard - PSA Supply</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2 id="welcomeMessage">Welcome, Admin</h2>
+        <p><a href="../logout.html">Logout</a></p>
+
+        <h3>Add New Inventory Item</h3>
+        <form id="addItemForm">
+            <input type="text" name="item_name" placeholder="Item Name" required>
+            <input type="text" name="description" placeholder="Description">
+            <input type="text" name="category" placeholder="Category">
+            <input type="number" name="quantity" placeholder="Quantity" required>
+            <input type="number" name="reorder_level" placeholder="Reorder Level" required>
+            <button type="submit">Add Item</button>
+        </form>
+
+        <h3>Inventory List</h3>
+        <table border="1" cellpadding="5" cellspacing="0" id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>ID</th><th>Name</th><th>Description</th><th>Category</th><th>Qty</th><th>Reorder</th><th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        async function loadInventory() {
+            try {
+                const response = await fetch('../api/get_inventory.php');
+                const data = await response.json();
+                const tbody = document.querySelector('#inventoryTable tbody');
+                tbody.innerHTML = '';
+
+                data.forEach(item => {
+                    tbody.innerHTML += `<tr>
+                        <td>${item.item_id}</td>
+                        <td>${item.item_name}</td>
+                        <td>${item.description}</td>
+                        <td>${item.category}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.reorder_level}</td>
+                        <td><button onclick="deleteItem(${item.item_id})">Delete</button></td>
+                    </tr>`;
+                });
+            } catch(err) {
+                console.error(err);
+            }
+        }
+
+        async function deleteItem(id) {
+            if(!confirm('Delete this item?')) return;
+            const formData = new FormData();
+            formData.append('delete_id', id);
+            const response = await fetch('../api/manage_inventory.php', { method:'POST', body: formData });
+            const result = await response.json();
+            if(result.success) loadInventory();
+            else alert(result.message);
+        }
+
+        document.getElementById('addItemForm').addEventListener('submit', async e => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('../api/manage_inventory.php', { method:'POST', body: formData });
+            const result = await response.json();
+            if(result.success) {
+                e.target.reset();
+                loadInventory();
+            } else {
+                alert(result.message);
+            }
+        });
+
+        // Load inventory when page loads
+        window.onload = loadInventory;
+    </script>
+</body>
+</html>

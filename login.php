@@ -21,9 +21,9 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
             $_SESSION['role'] = $user['role'];
 
             if ($user['role'] == 'admin') {
-                header("Location: admin/dashboard.php");
+                header("Location: admin/dashboard.html");
             } else {
-                header("Location: staff/dashboard.php");
+                header("Location: staff/dashboard.html");
             }
             exit();
         } else {
