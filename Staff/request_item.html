@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Request Item</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2 id="welcomeMessage">Request Item</h2>
+        <p><a href="dashboard.html">⬅ Back</a></p>
+
+        <form id="requestForm">
+            <select name="item_id" id="itemSelect" required></select>
+            <input type="number" name="quantity" placeholder="Quantity" required>
+            <button type="submit">Submit Request</button>
+        </form>
+    </div>
+
+    <script>
+        // 🔐 Check staff session
+        async function checkStaff() {
+            const res = await fetch('../api/get_session.php');
+            const data = await res.json();
+
+            if (data.role !== 'staff') {
+                alert('Unauthorized!');
+                window.location = '../login.html';
+            } else {
+                document.getElementById('welcomeMessage').textContent =
+                    'Request Item - ' + data.name;
+            }
+        }
+
+        // 📦 Load items into dropdown
+        async function loadItems() {
+            const res = await fetch('../api/get_inventory.php');
+            const data = await res.json();
+
+            const select = document.getElementById('itemSelect');
+            select.innerHTML = '<option value="">Select Item</option>';
+
+            data.forEach(item => {
+                select.innerHTML += `<option value="${item.item_id}">
+                    ${item.item_name} (Stock: ${item.quantity})
+                </option>`;
+            });
+        }
+
+        // 📤 Submit request
+        document.getElementById('requestForm').addEventListener('submit', async e => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+
+            const res = await fetch('../api/create_request.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+                alert('Request submitted!');
+                e.target.reset();
+            } else {
+                alert(result.message);
+            }
+        });
+
+        window.onload = () => {
+            checkStaff();
+            loadItems();
+        };
+    </script>
+</body>
+</html>
