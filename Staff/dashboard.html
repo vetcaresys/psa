@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Dashboard - PSA Supply</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2 id="welcomeMessage">Welcome, Staff</h2>
+        <p><a href="../logout.php">Logout</a></p>
+
+        <h3>Inventory List</h3>
+        <table border="1" cellpadding="5" cellspacing="0" id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>ID</th><th>Name</th><th>Description</th><th>Category</th><th>Qty</th><th>Status</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        async function loadInventory() {
+            try {
+                const response = await fetch('../api/get_inventory.php');
+                const data = await response.json();
+                const tbody = document.querySelector('#inventoryTable tbody');
+                tbody.innerHTML = '';
+
+                data.forEach(item => {
+                    const status = item.quantity <= item.reorder_level ? 'Low Stock' : 'OK';
+                    const color = item.quantity <= item.reorder_level ? 'red' : 'black';
+                    tbody.innerHTML += `<tr>
+                        <td>${item.item_id}</td>
+                        <td>${item.item_name}</td>
+                        <td>${item.description}</td>
+                        <td>${item.category}</td>
+                        <td>${item.quantity}</td>
+                        <td style="color:${color}">${status}</td>
+                    </tr>`;
+                });
+            } catch(err) {
+                console.error(err);
+            }
+        }
+
+        window.onload = loadInventory;
+    </script>
+</body>
+</html>

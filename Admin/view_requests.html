@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Requests - Admin</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2 id="welcomeMessage">View Requests</h2>
+        <p><a href="dashboard.html">⬅ Back to Dashboard</a></p>
+
+        <table border="1" cellpadding="5" cellspacing="0" id="requestTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        // 🔐 Check admin session
+        async function checkAdmin() {
+            const res = await fetch('../api/get_session.php');
+            const data = await res.json();
+
+            if (data.role !== 'admin') {
+                alert('Unauthorized!');
+                window.location = '../login.html';
+            } else {
+                document.getElementById('welcomeMessage').textContent =
+                    'Welcome, ' + data.name + ' (Admin) - Requests';
+            }
+        }
+
+        // 📦 Load requests
+        async function loadRequests() {
+            try {
+                const res = await fetch('../api/get_requests.php');
+                const data = await res.json();
+
+                const tbody = document.querySelector('#requestTable tbody');
+                tbody.innerHTML = '';
+
+                data.forEach(req => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${req.request_id}</td>
+                            <td>${req.full_name}</td>
+                            <td>${req.status}</td>
+                            <td>${req.request_date}</td>
+                            <td>
+                                ${req.status === 'pending' ? `
+                                    <button onclick="updateStatus(${req.request_id}, 'approved')">Approve</button>
+                                    <button onclick="updateStatus(${req.request_id}, 'rejected')">Reject</button>
+                                ` : 'No action'}
+                            </td>
+                        </tr>
+                    `;
+                });
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // 🔄 Update request status
+        async function updateStatus(id, status) {
+            if (!confirm(`Are you sure you want to ${status} this request?`)) return;
+
+            const formData = new FormData();
+            formData.append('request_id', id);
+            formData.append('status', status);
+
+            const res = await fetch('../api/update_request_status.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+                alert('Updated successfully!');
+                loadRequests();
+            } else {
+                alert(result.message);
+            }
+        }
+
+        // 🚀 Run on load
+        window.onload = () => {
+            checkAdmin();
+            loadRequests();
+        };
+    </script>
+</body>
+</html>
