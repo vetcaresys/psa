@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Staff Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hidden { display: none !important; }
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        #dashboard { width: 100%; max-width: 800px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-form" class="card login-card">
+        <div class="card-body text-center">
+            <i class="bi bi-shield-lock-fill text-primary" style="font-size: 3rem;"></i>
+            <h3 class="card-title my-3">Staff Portal</h3>
+            
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="user" placeholder="Username">
+                <label for="user">Username</label>
+            </div>
+            
+            <div class="form-floating mb-3">
+                <input type="password" class="form-control" id="pass" placeholder="Password">
+                <label for="pass">Password</label>
+            </div>
+            
+            <button class="btn btn-primary w-100 py-2" onclick="login()">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+            </button>
+        </div>
+    </div>
+
+    <div id="dashboard" class="container hidden">
+        <div class="bg-white p-5 rounded shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Welcome, <span id="role-tag" class="text-primary text-capitalize"></span></h1>
+                <button class="btn btn-outline-danger btn-sm" onclick="location.reload()">
+                    <i class="bi bi-power"></i> Logout
+                </button>
+            </div>
+
+            <nav id="dynamic-menu" class="nav nav-pills bg-light p-2 rounded">
+                </nav>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        async function login() {
+            const btn = document.querySelector('button[onclick="login()"]');
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Authenticating...';
+            btn.disabled = true;
+
+            const username = document.getElementById('user').value;
+            const password = document.getElementById('pass').value;
+
+            try {
+                const response = await fetch('api/api_login.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('login-form').classList.add('hidden');
+                    document.getElementById('dashboard').classList.remove('hidden');
+                    document.getElementById('role-tag').innerText = data.role;
+
+                    const menu = document.getElementById('dynamic-menu');
+                    menu.innerHTML = '<a class="nav-link active me-2" href="home.php"><i class="bi bi-house-door"></i> Home</a>';
+
+                    data.modules.forEach(mod => {
+                        const link = document.createElement('a');
+                        link.className = "nav-link text-dark border-end";
+                        link.href = `${mod.perm_slug}.php`;
+                        link.innerHTML = `<i class="bi bi-layers"></i> ${mod.perm_name}`;
+                        menu.appendChild(link);
+                    });
+                } else {
+                    alert(data.message);
+                    resetBtn(btn);
+                }
+            } catch (error) {
+                console.error("Login Error:", error);
+                resetBtn(btn);
+            }
+        }
+
+        function resetBtn(btn) {
+            btn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> Login';
+            btn.disabled = false;
+        }
+    </script>
+</body>
+</html>
