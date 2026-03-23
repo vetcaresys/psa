@@ -296,3 +296,89 @@ footer {
         padding: 1.5rem !important;
     }
 }
+@media print {
+    /* Force Landscape Orientation */
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+
+    /* Hide UI Elements */
+    #sidebar, #sidebar-toggle, .btn, .sidebar-overlay, .navbar {
+        display: none !important;
+    }
+
+    /* Expand content to full width */
+    #main-content {
+        margin-left: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Force the table to respect the widths we set */
+    .table {
+        width: 100% !important;
+        table-layout: fixed !important; /* Critical for controlling widths */
+        border-collapse: collapse !important;
+    }
+
+    /* Ensure colors are visible on paper */
+    .bg-light {
+        background-color: #f2f2f2 !important;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    .text-primary { color: #004a99 !important; }
+    .text-danger { color: #b00020 !important; }
+    
+    /* Define column widths */
+    .col-type-form { width: 20%; }
+    .col-beg-inv { width: 10%; }
+    .col-dr-no { width: 15%; }
+    .col-qty { width: 10%; }
+    .col-available { width: 12%; }
+    .col-sold { width: 10%; }
+    .col-returned { width: 12%; }
+    .col-ending { width: 11%; }
+
+    .table td, .table th {
+        word-wrap: break-word !important; /* Forces long text to go to next line */
+        white-space: normal !important;  /* Overrides text-nowrap */
+        overflow: hidden;
+        padding: 6px !important;
+        vertical-align: middle !important;
+        border: 1px solid #000 !important;
+    }
+}
+@media print {
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+
+    /* Force the table to respect the widths we set */
+    .table {
+        width: 100% !important;
+        table-layout: fixed !important; /* Critical for controlling widths */
+        border-collapse: collapse !important;
+    }
+
+    /* Define column widths */
+    .col-type-form { width: 20%; }
+    .col-beg-inv { width: 10%; }
+    .col-dr-no { width: 15%; }
+    .col-qty { width: 10%; }
+    .col-available { width: 12%; }
+    .col-sold { width: 10%; }
+    .col-returned { width: 12%; }
+    .col-ending { width: 11%; }
+
+    .table td, .table th {
+        word-wrap: break-word !important; /* Forces long text to go to next line */
+        white-space: normal !important;  /* Overrides text-nowrap */
+        overflow: hidden;
+        padding: 6px !important;
+        vertical-align: middle !important;
+        border: 1px solid #000 !important;
+    }
+}
