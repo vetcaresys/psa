@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Booking Successful | PSA Ozamiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .success-check {
+            width: 80px;
+            height: 80px;
+            background: #28a745;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 20px rgba(40, 167, 69, 0.2);
+        }
+        .qr-placeholder {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 15px;
+            padding: 2rem;
+            display: inline-block;
+        }
+        .ref-number {
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 2px;
+            background: var(--egov-bg-light);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body style="background-color: var(--egov-bg-light);">
+
+    <div class="page-wrapper">
+        <div class="content-grow d-flex align-items-center">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 text-center">
+                        <div class="card border-0 shadow-lg rounded-4 p-5 border-top-gov">
+                            
+                            <div class="success-check">
+                                <i class="bi bi-check-lg"></i>
+                            </div>
+
+                            <h2 class="fw-bold text-egov-navy mb-2">Booking Successful!</h2>
+                            <p class="text-muted mb-4">Your request has been recorded. Please present this reference onsite for payment and release.</p>
+
+                            <div class="mb-4">
+                                <small class="text-uppercase fw-bold text-muted d-block mb-2">Reference Number</small>
+                                <h3 class="ref-number text-primary d-inline-block">PSA-2026-0921-X</h3>
+                            </div>
+
+                            <div class="qr-placeholder mb-4">
+                                <i class="bi bi-qr-code fs-1 text-dark"></i>
+                                <p class="small text-muted mt-2 mb-0">Scan at the PSA Kiosk</p>
+                            </div>
+
+                            <div class="alert alert-info border-0 rounded-4 text-start d-flex align-items-center mb-4">
+                                <i class="bi bi-info-circle-fill me-3 fs-4"></i>
+                                <div class="small">
+                                    <strong>Reminder:</strong> Please bring a valid ID and the total amount of <strong>₱575.00</strong> to the PSA Ozamiz Office.
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-egov rounded-pill py-3 fw-bold" onclick="window.print()">
+                                    <i class="bi bi-printer me-2"></i> Print or Save as PDF
+                                </button>
+                                <a href="index.html" class="btn btn-link text-decoration-none text-muted mt-2">
+                                    Return to Home
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <p class="mt-4 text-muted small">
+                            A confirmation email/SMS has been sent to your registered contact details.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="py-4 bg-white border-top">
+            <div class="container text-center text-muted small">
+                <p>© 2026 PSA Ozamiz Office | eGovPH Integration</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

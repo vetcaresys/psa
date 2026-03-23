@@ -91,9 +91,17 @@
                 <h5 class="mb-0 fw-bold" style="color: #0e1e38;">
                     <i class="bi bi-box-seam me-2"></i> Stock List
                 </h5>
-                <button class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
-                    <i class="bi bi-plus-lg me-1"></i> Add New Item
-                </button>
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#scanQRModal">
+                            <i class="bi bi-qr-code-scan me-1"></i> Scan QR
+                        </button>
+                        <button class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                            <i class="bi bi-plus-lg me-1"></i> Add New Item
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
