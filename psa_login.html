@@ -72,9 +72,9 @@
         if (data.success) {
             // REDIRECTION LOGIC START
             if (data.role.toLowerCase() === 'admin') {
-                window.location.href = 'admin_dashboard.php';
+                window.location.href = 'admin/admin_dashboard.html';
             } else if (data.role.toLowerCase() === 'staff') {
-                window.location.href = 'staff_dashboard.php';
+                window.location.href = 'staff/staff_dashboard.html';
             } else {
                 alert("Role not recognized. Contact System Admin.");
                 resetBtn(btn);
