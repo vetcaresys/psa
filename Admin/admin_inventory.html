@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PSA Admin | Inventory Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <div class="sidebar-overlay" id="overlay"></div>
+
+    <div id="sidebar">
+        <div class="p-4 text-center border-bottom border-secondary">
+            <h5 class="fw-bold text-white mb-0">PSA <span class="text-egov-cyan">ADMIN</span></h5>
+            <small class="text-white-50">Ozamiz City Office</small>
+        </div>
+        <nav class="nav flex-column mt-3">
+            <a href="admin_dashboard.html" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+            <a href="#" class="nav-link"><i class="bi bi-file-earmark-person"></i> Birth Registry</a>
+            <a href="#" class="nav-link"><i class="bi bi-heart-fill"></i> Marriage Records</a>
+            <a href="#" class="nav-link"><i class="bi bi-journal-text"></i> Death Records</a>
+            <a href="#" class="nav-link"><i class="bi bi-people"></i> User Management</a>
+            <a href="admin_inventory.html" class="nav-link active"><i class="bi bi-database"></i> Inventory</a>
+            <hr class="mx-3 border-secondary">
+            <a href="../psa_login.html" class="nav-link text-danger"><i class="bi bi-box-arrow-left"></i> Logout</a>
+        </nav>
+    </div>
+
+    <div id="main-content">
+        <nav class="navbar navbar-expand-lg navbar-custom shadow-sm mb-4 px-3 rounded-3">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center">
+                    <button id="sidebar-toggle" class="me-3">
+                        <i class="bi bi-list fs-4"></i>
+                    </button>
+                    <span class="navbar-brand mb-0 h1 fs-5 text-muted">Inventory Management</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <span class="me-3 d-none d-md-inline small">Admin <strong>Loelyn</strong></span>
+                    <img src="https://ui-avatars.com/api/?name=Admin+Loelyn&background=0e1e38&color=fff" class="rounded-circle" width="35">
+                </div>
+            </div>
+        </nav>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="card egov-card p-3 border-start border-primary border-4">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon bg-primary bg-opacity-10 text-primary p-3 rounded-circle me-3">
+                            <i class="bi bi-archive fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted small mb-0">Total Items</h6>
+                            <h3 class="mb-0 fw-bold">42</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card egov-card p-3 border-start border-danger border-4">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon bg-danger bg-opacity-10 text-danger p-3 rounded-circle me-3">
+                            <i class="bi bi-exclamation-triangle fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted small mb-0">Low Stock Alert</h6>
+                            <h3 class="mb-0 fw-bold">5</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card egov-card p-3 border-start border-success border-4">
+                    <div class="d-flex align-items-center">
+                        <div class="stat-icon bg-success bg-opacity-10 text-success p-3 rounded-circle me-3">
+                            <i class="bi bi-check-circle fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted small mb-0">Newly Restocked</h6>
+                            <h3 class="mb-0 fw-bold">12</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <div class="card-header bg-white py-3 border-bottom border-light d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold" style="color: #0e1e38;">
+                    <i class="bi bi-box-seam me-2"></i> Stock List
+                </h5>
+                <button class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                    <i class="bi bi-plus-lg me-1"></i> Add New Item
+                </button>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <th class="ps-4 py-3">Item Name</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                                <th>Last Updated</th>
+                                <th class="text-end pe-4">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="ps-4 fw-bold">SECPA (Birth Cert)</td>
+                                <td><span class="badge bg-light text-dark border">Forms</span></td>
+                                <td>2,500 pcs</td>
+                                <td><span class="badge bg-success rounded-pill px-3">In Stock</span></td>
+                                <td>Oct 24, 2026</td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-sm btn-outline-secondary border-0"><i class="bi bi-pencil-square"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-4 fw-bold">Printer Ink (Black)</td>
+                                <td><span class="badge bg-light text-dark border">Supplies</span></td>
+                                <td>2 units</td>
+                                <td><span class="badge bg-danger rounded-pill px-3">Critical</span></td>
+                                <td>Oct 25, 2026</td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-sm btn-outline-secondary border-0"><i class="bi bi-pencil-square"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="ps-4 fw-bold">Marriage License Forms</td>
+                                <td><span class="badge bg-light text-dark border">Forms</span></td>
+                                <td>150 pcs</td>
+                                <td><span class="badge bg-warning text-dark rounded-pill px-3">Low Stock</span></td>
+                                <td>Oct 22, 2026</td>
+                                <td class="text-end pe-4">
+                                    <button class="btn btn-sm btn-outline-secondary border-0"><i class="bi bi-pencil-square"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addItemModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Add Inventory Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label small text-muted">Item Name</label>
+                            <input type="text" class="form-control rounded-3" placeholder="e.g. SECPA Paper">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small text-muted">Category</label>
+                                <select class="form-select rounded-3">
+                                    <option>Forms</option>
+                                    <option>Supplies</option>
+                                    <option>Equipment</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label small text-muted">Initial Quantity</label>
+                                <input type="number" class="form-control rounded-3">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 mt-2">Save Item</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebar-toggle');
+        const overlay = document.getElementById('overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        toggleBtn.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+    </script>
+</body>
+</html>

@@ -118,3 +118,107 @@ body {
 .egov-card:hover {
     transform: translateY(-3px);
 }
+
+/* Sidebar & Layout Enhancements */
+#sidebar {
+    width: 260px;
+    height: 100vh;
+    position: fixed;
+    background: var(--egov-navy); /* PSA Navy */
+    border-right: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+#sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.2s;
+    border-left: 4px solid transparent;
+}
+
+#sidebar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--egov-cyan);
+}
+
+#sidebar .nav-link.active {
+    background: rgba(0, 212, 255, 0.1); /* Cyan glow */
+    color: var(--egov-cyan);
+    font-weight: bold;
+    border-left: 4px solid var(--egov-yellow); /* Official Accent */
+}
+
+#main-content {
+    margin-left: 260px;
+    padding: 25px;
+    min-height: 100vh;
+    background-color: var(--egov-bg-light); /* Clean light gray */
+}
+
+.navbar-custom {
+    background: white;
+    border-bottom: 3px solid var(--egov-yellow); /* eGov Ribbon */
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+/* Sidebar Mobile Logic */
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -260px; /* Hide sidebar off-screen */
+    }
+    
+    #sidebar.active {
+        margin-left: 0; /* Slide in when active */
+        box-shadow: 10px 0 25px rgba(0,0,0,0.3);
+    }
+
+    #main-content {
+        margin-left: 0 !important; /* Full width on mobile */
+        padding: 15px;
+    }
+
+    .navbar-custom {
+        margin-top: 10px;
+    }
+}
+
+/* Toggle Button Styling */
+#sidebar-toggle {
+    background: var(--egov-navy);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: none; /* Hidden on desktop */
+}
+
+@media (max-width: 768px) {
+    #sidebar-toggle {
+        display: inline-block; /* Show on mobile */
+    }
+}
+
+/* Overlay for clicking outside sidebar on mobile */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
