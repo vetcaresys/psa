@@ -29,10 +29,10 @@ if (isset($data['username']) && isset($data['password'])) {
         $_SESSION['role_id'] = $userData['psa_role_id'];
 
         // 3. Get Dynamic Permissions for this Role
-        $perm_sql = "SELECT p.perm_name, p.perm_slug 
-                     FROM permissions p
-                     JOIN psa_role_permissions rp ON p.perm_id = rp.perm_id
-                     WHERE rp.role_id = ?";
+        $perm_sql = "SELECT p.psa_permission_name, p.psa_permission_slug 
+                     FROM psa_permissions p
+                     JOIN psa_role_permiossions rp ON p.psa_permission_id = rp.psa_role_permission_id
+                     WHERE rp.psa_role_permission_id = ?";
         
         $perm_stmt = $conn->prepare($perm_sql);
         $perm_stmt->bind_param("i", $userData['psa_role_id']);
