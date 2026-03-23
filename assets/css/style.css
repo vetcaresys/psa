@@ -1,0 +1,120 @@
+/* eGov Ph Colors & Variables */
+:root {
+    --egov-navy: #0e1e38;      /* Primary Background / Nav */
+    --egov-blue: #0056b3;      /* Primary Action Blue */
+    --egov-cyan: #00d4ff;      /* Tech/Accent Cyan */
+    --egov-yellow: #ffc107;    /* Official Yellow Accent */
+    --egov-red: #dc3545;       /* Danger/Highlight Red */
+    --egov-white: #ffffff;
+    --egov-bg-light: #f4f7f6;
+}
+
+/* Global Styles */
+body {
+    background-color: var(--egov-navy);
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-image: radial-gradient(circle at 10% 20%, rgba(0, 86, 179, 0.3) 0%, rgba(14, 30, 56, 1) 90%);
+    margin: 0;
+    padding: 0; /* Changed to 0 for general pages */
+}
+
+/* Reusable Container & Utility */
+.border-top-gov {
+    border-top: 4px solid var(--egov-yellow) !important;
+}
+
+.text-egov-cyan {
+    color: var(--egov-cyan) !important;
+}
+
+/* Login Page Specifics */
+.login-container {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 900px;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+.login-page-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+.egov-banner {
+    background: linear-gradient(135deg, #0d47a1 0%, #1565c0 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.egov-banner::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: var(--egov-yellow);
+    border-radius: 50%;
+    opacity: 0.15;
+}
+
+.egov-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: -30px;
+    width: 100px;
+    height: 100px;
+    background: var(--egov-red);
+    border-radius: 50%;
+    opacity: 0.1;
+}
+
+.form-section {
+    padding: 3rem;
+    background: white;
+}
+
+/* Buttons & Inputs */
+.btn-egov {
+    background: var(--egov-navy);
+    color: white;
+    border: none;
+    transition: all 0.3s;
+}
+
+.btn-egov:hover {
+    background: var(--egov-blue);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.form-floating > .form-control:focus {
+    border-color: var(--egov-blue);
+    box-shadow: 0 0 0 0.25rem rgba(0, 86, 179, 0.25);
+}
+
+/* Dashboard Card Enhancements (For Admin/Staff Pages) */
+.egov-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+
+.egov-card:hover {
+    transform: translateY(-3px);
+}
