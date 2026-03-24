@@ -53,13 +53,15 @@
        <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 px-4 gap-2">
             <ul class="nav nav-pills mb-0" id="inventoryTabs" role="tablist">
                 <li class="nav-item">
-                    <button class="nav-link active rounded-pill btn-sm" id="forms-tab" data-bs-toggle="tab" data-bs-target="#forms-content">
-                        <i class="bi bi-file-earmark-text me-2"></i>Civil Registry Forms
+                    <button class="nav-link active rounded-pill btn-sm" id="forms-tab" 
+                            data-bs-toggle="tab" data-bs-target="#forms-content" 
+                            data-category="Form"> <i class="bi bi-file-earmark-text me-2"></i>Civil Registry Forms
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link rounded-pill btn-sm" id="devices-tab" data-bs-toggle="tab" data-bs-target="#devices-content">
-                        <i class="bi bi-laptop me-2"></i>IT Devices
+                    <button class="nav-link rounded-pill btn-sm" id="devices-tab" 
+                            data-bs-toggle="tab" data-bs-target="#devices-content" 
+                            data-category="Device"> <i class="bi bi-laptop me-2"></i>IT Devices
                     </button>
                 </li>
             </ul>
@@ -144,6 +146,7 @@
                     </div>
                 </div>
             </div>
+            
             </div>
             <div class="card-footer bg-white py-4 px-4 border-top">
                 <div class="row text-center text-md-start">
@@ -335,89 +338,105 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const sidebar = document.getElementById('sidebar');
-        const toggleBtn = document.getElementById('sidebar-toggle');
-        const overlay = document.getElementById('overlay');
+     // 1. Sidebar Logic (Kept as is)
+const sidebar = document.getElementById('sidebar');
+const toggleBtn = document.getElementById('sidebar-toggle');
+const overlay = document.getElementById('overlay');
 
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-        });
-        document.addEventListener('DOMContentLoaded', loadInventory);
-        // Listen for tab changes
-        const tabButtons = document.querySelectorAll('button[data-bs-toggle="tab"]');
-            tabButtons.forEach(tabEl => {
-                tabEl.addEventListener('shown.bs.tab', function (event) {
-                    // event.target is the button you just clicked
-                    if (event.target.id === 'forms-tab') {
-                        loadInventory('Form');
-                    } else if (event.target.id === 'devices-tab') {
-                        loadInventory('Device');
-                    }
-                });
-            });
+if(toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    });
+}
 
-            async function loadInventory(category = 'Form') {
-        try {
-            const response = await fetch(`../api/get_inventory.php?category=${category}`);
-            const data = await response.json();
-            
-            const formsBody = document.getElementById('inventory-table-body');
-            const devicesBody = document.getElementById('devices-table-body');
-            const reportTitle = document.querySelector('.card-header h4');
+// 2. Tab Event Listener
+document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(tabEl => {
+    tabEl.addEventListener('shown.bs.tab', (event) => {
+        const category = event.target.getAttribute('data-category');
+        console.log("Tab Switched to:", category);
+        loadInventory(category);
+    });
+});
 
-            if (category === 'Form') {
-                // Update Title
-                reportTitle.innerHTML = 'Monthly Report of Civil Registry Forms';
-                formsBody.innerHTML = ''; 
+// 3. Initial Load on Page Open
+document.addEventListener('DOMContentLoaded', () => {
+    const activeTab = document.querySelector('button[data-bs-toggle="tab"].active');
+    const initialCategory = activeTab ? activeTab.getAttribute('data-category') : 'Form';
+    
+    console.log("Initial Load Category:", initialCategory);
+    loadInventory(initialCategory);
+});
 
-                if (data.length === 0) {
-                    formsBody.innerHTML = `<tr><td colspan="8" class="py-5 text-muted"><i class="bi bi-folder-x fs-2 d-block mb-2"></i>No form records found for this period.</td></tr>`;
-                } else {
-                    data.forEach(item => {
-                        formsBody.innerHTML += `
-                            <tr>
-                                <td class="ps-4 text-start fw-bold">${item.item_name}</td>
-                                <td>${item.beginning_inventory}</td>
-                                <td class="text-muted">${item.dr_no || '-'}</td>
-                                <td class="fw-bold">${item.qty_received}</td>
-                                <td>${item.available_for_sale}</td>
-                                <td class="text-danger">-${item.forms_sold}</td>
-                                <td>${item.forms_returned || ''}</td>
-                                <td class="pe-4 fw-bold text-primary">${item.ending_inventory}</td>
-                            </tr>`;
-                    });
-                }
+// 4. THE CONSOLIDATED FUNCTION (Delete the other two versions!)
+async function loadInventory(category) {
+    console.log("Executing loadInventory for:", category);
+    
+    const formsBody = document.getElementById('inventory-table-body');
+    const devicesBody = document.getElementById('devices-table-body');
+    const reportTitle = document.querySelector('.card-header h4');
+
+    // Show loading state
+    if (formsBody) formsBody.innerHTML = '<tr><td colspan="8" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div> Loading...</td></tr>';
+    if (devicesBody) devicesBody.innerHTML = '<tr><td colspan="6" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div> Loading...</td></tr>';
+
+    try {
+        // IMPORTANT: We pass the category variable here
+        const response = await fetch(`../api/get_inventory.php?category=${category}`)
+        const data = await response.json();
+        console.log("Data Received:", data);
+
+        if (category === 'Form') {
+            if (!formsBody) return;
+            reportTitle.innerHTML = 'Monthly Report of Civil Registry Forms';
+            formsBody.innerHTML = ''; 
+
+            if (!data || data.length === 0) {
+                formsBody.innerHTML = `<tr><td colspan="8" class="py-5 text-center text-muted">No Forms Found</td></tr>`;
             } else {
-                // Update Title
-                reportTitle.innerHTML = 'IT Devices & Hardware Inventory';
-                devicesBody.innerHTML = ''; 
-
-                if (data.length === 0) {
-                    devicesBody.innerHTML = `<tr><td colspan="6" class="py-5 text-muted"><i class="bi bi-cpu fs-2 d-block mb-2"></i>No registered devices found.</td></tr>`;
-                } else {
-                    data.forEach(item => {
-                        devicesBody.innerHTML += `
-                            <tr>
-                                <td class="ps-4 text-start fw-bold">${item.item_name}</td>
-                                <td>${item.brand_model || '-'}</td>
-                                <td><code>${item.serial_no || '-'}</code></td>
-                                <td>${item.assigned_to || 'In Storage'}</td>
-                                <td><span class="badge rounded-pill bg-success-subtle text-success border border-success px-3">Active</span></td>
-                                <td class="pe-4">
-                                    <button class="btn btn-sm btn-outline-primary py-0" onclick="manageDevice(${item.item_id})">Manage</button>
-                                </td>
-                            </tr>`;
-                    });
-                }
+                data.forEach(item => {
+                    formsBody.innerHTML += `
+                        <tr>
+                            <td class="ps-4 text-start fw-bold">${item.item_name}</td>
+                            <td>${item.beginning_inventory}</td>
+                            <td class="text-muted small">${item.dr_no || '-'}</td>
+                            <td class="fw-bold">${item.qty_received > 0 ? item.qty_received : '0'}</td>
+                            <td class="bg-light-subtle">${item.available_for_sale}</td>
+                            <td class="text-danger fw-bold">${item.forms_sold > 0 ? '-' + item.forms_sold : '0'}</td>
+                            <td>${item.forms_returned || '0'}</td>
+                            <td class="pe-4 fw-bold text-primary">${item.ending_inventory}</td>
+                        </tr>`;
+                });
             }
-        } catch (error) {
-            console.error("Load Error:", error);
-            // Show error message in the active table
-            const activeBody = (category === 'Form') ? document.getElementById('inventory-table-body') : document.getElementById('devices-table-body');
-            activeBody.innerHTML = `<tr><td colspan="8" class="py-4 text-danger">Error loading data. Please check your connection.</td></tr>`;
+        } 
+        else if (category === 'Device') {
+            if (!devicesBody) return;
+            reportTitle.innerHTML = 'IT Devices & Hardware Inventory';
+            devicesBody.innerHTML = ''; 
+
+            if (!data || data.length === 0) {
+                devicesBody.innerHTML = `<tr><td colspan="6" class="py-5 text-center text-muted">No Devices Found</td></tr>`;
+            } else {
+                data.forEach(item => {
+                    devicesBody.innerHTML += `
+                        <tr>
+                            <td class="ps-4 text-start fw-bold">${item.item_name}</td>
+                            <td>${item.brand_model || 'N/A'}</td>
+                            <td><code>${item.serial_no || 'N/A'}</code></td>
+                            <td>${item.assigned_to || 'Unassigned'}</td>
+                            <td><span class="badge rounded-pill bg-success-subtle text-success border border-success px-3">${item.status || 'Active'}</span></td>
+                            <td class="pe-4">
+                                <button class="btn btn-sm btn-outline-primary py-0" onclick="manageDevice(${item.item_id})">Manage</button>
+                            </td>
+                        </tr>`;
+                });
+            }
         }
+    } catch (error) {
+        console.error("Critical Load Error:", error);
+        if (formsBody) formsBody.innerHTML = `<tr><td colspan="8" class="text-center text-danger">Error loading data.</td></tr>`;
     }
+}
        document.getElementById('inventorySearch').addEventListener('keyup', function() {
             const filter = this.value.toLowerCase().trim();
             const tableBody = document.getElementById('inventory-table-body');
@@ -490,7 +509,6 @@
                     alert('Return recorded. Inventory updated.');
                     this.reset();
                     bootstrap.Modal.getInstance(recordReturnModalEl).hide();
-                    loadInventory(); 
                 }
             } catch (error) { console.error("Return Error:", error); }
         });
@@ -523,7 +541,6 @@
                     alert('Sale recorded successfully!');
                     this.reset();
                     bootstrap.Modal.getInstance(recordSaleModalEl).hide();
-                    loadInventory(); // This updates the "Forms Sold" column in your table!
                 }
             } catch (error) { console.error("Sale Error:", error); }
         });
@@ -558,7 +575,9 @@
                     alert('Stock added and ledger updated!');
                     this.reset();
                     bootstrap.Modal.getInstance(stockInModalEl).hide();
-                    loadInventory(); // Refresh the table!
+                    const activeTab = document.querySelector('button[data-bs-toggle="tab"].active');
+                    const currentCat = activeTab ? activeTab.getAttribute('data-category') : 'Form';
+                    loadInventory(currentCat);
                 }
             } catch (error) { console.error(error); }
         });
@@ -596,7 +615,6 @@
                     alert('Item Registered Successfully!');
                     this.reset();
                     bootstrap.Modal.getInstance(document.getElementById('addItemModal')).hide();
-                    loadInventory(); // Refresh your table automatically!
                 } else {
                     alert('Error: ' + result.message);
                 }
@@ -605,58 +623,6 @@
             }
         });
 
-        async function loadInventory() {
-            const tableBody = document.getElementById('inventory-table-body');
-            
-            // 1. Show a loading spinner while fetching
-            tableBody.innerHTML = '<tr><td colspan="8" class="text-center py-4"><div class="spinner-border spinner-border-sm text-primary"></div> Loading inventory...</td></tr>';
-            
-            try {
-                const response = await fetch('../api/get_inventory.php');
-                const data = await response.json();
-
-                tableBody.innerHTML = ''; // Clear loading/static rows
-
-                // 2. CHECK FOR NO DATA
-                if (!data || data.length === 0) {
-                    tableBody.innerHTML = `
-                        <tr>
-                            <td colspan="8" class="text-center py-5 text-muted">
-                                <i class="bi bi-inbox fs-2 d-block mb-2"></i>
-                                No inventory records found for this period.
-                            </td>
-                        </tr>`;
-                    return;
-                }
-
-                // 3. RENDER DATA
-                data.forEach(item => {
-                    const row = `
-                        <tr>
-                            <td class="ps-4 text-start fw-bold">${item.item_name}</td>
-                            <td>${item.beginning_inventory}</td>
-                            <td class="text-muted small">${item.dr_no || '<span class="opacity-50">-</span>'}</td>
-                            <td class="fw-bold">${item.qty_received > 0 ? item.qty_received : ''}</td>
-                            <td class="bg-light-subtle">${item.available_for_sale}</td>
-                            <td class="text-danger fw-bold">${item.forms_sold > 0 ? '-' + item.forms_sold : '0'}</td>
-                            <td class="text-danger fw-bold">${item.forms_returned > 0 ? item.forms_returned : ''}</td>
-                            <td class="pe-4 fw-bold text-primary">${item.ending_inventory}</td>
-                        </tr>
-                    `;
-                    tableBody.insertAdjacentHTML('beforeend', row);
-                });
-
-            } catch (error) {
-                console.error('Error fetching inventory:', error);
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="8" class="text-center py-4 text-danger">
-                            <i class="bi bi-exclamation-triangle me-2"></i>
-                            Error loading data. Please check your database connection.
-                        </td>
-                    </tr>`;
-            }
-        }
     </script>
 </body>
 </html>
