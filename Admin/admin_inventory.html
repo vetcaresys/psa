@@ -75,6 +75,12 @@
                         Devices
                     </button>
                 </li>
+                <li class="nav-item">
+                    <button class="nav-link rounded-pill btn-sm" data-bs-toggle="tab" data-bs-target="#assets-content"
+                        data-category="Asset">
+                        <i class="bi bi-box-seam me-2"></i> General Assets
+                    </button>
+                </li>
             </ul>
 
             <div class="d-flex flex-wrap gap-2 justify-content-end">
@@ -155,6 +161,25 @@
                                         </tr>
                                     </thead>
                                     <tbody id="devices-table-body" class="small text-center">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="assets-content" role="tabpanel">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body p-0">
+                                <table class="table table-bordered align-middle mb-0 text-nowrap">
+                                    <thead class="bg-light text-center small text-uppercase">
+                                        <tr>
+                                            <th class="ps-4 py-3">Asset Name</th>
+                                            <th>Description</th>
+                                            <th>Quantity</th>
+                                            <th>Status</th>
+                                            <th class="pe-4">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="assets-table-body" class="small text-center">
                                     </tbody>
                                 </table>
                             </div>
@@ -495,6 +520,35 @@
                                 <button class="btn btn-sm btn-outline-primary py-0" onclick="manageDevice(${item.item_id})">Manage</button>
                             </td>
                         </tr>`;
+                        });
+                    }
+                }
+                else if (category === 'Asset') {
+                    const assetsBody = document.getElementById('assets-table-body');
+                    if (!assetsBody) return;
+
+                    reportTitle.innerHTML = 'General Assets Inventory';
+                    assetsBody.innerHTML = '';
+
+                    if (!data || data.length === 0) {
+                        assetsBody.innerHTML = `<tr><td colspan="5" class="py-5 text-center text-muted">No Assets Found</td></tr>`;
+                    } else {
+                        data.forEach(item => {
+                            assetsBody.innerHTML += `
+                <tr>
+                    <td class="ps-4 text-start fw-bold">${item.item_name}</td>
+                    <td>${item.description || '-'}</td>
+                    <td>${item.quantity || '0'}</td>
+                    <td>
+                        <span class="badge bg-info">${item.status || 'Available'}</span>
+                    </td>
+                    <td class="pe-4">
+                        <button class="btn btn-sm btn-outline-primary py-0"
+                            onclick="manageAsset(${item.item_id})">
+                            Manage
+                        </button>
+                    </td>
+                </tr>`;
                         });
                     }
                 }
